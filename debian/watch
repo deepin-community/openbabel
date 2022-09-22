@@ -1,0 +1,4 @@
+version=4
+opts="repacksuffix=+dfsg,dversionmangle=s/\+dfsg//,repack,compression=xz" \
+ https://github.com/openbabel/openbabel/releases \
+ (?:.*?/)?openbabel-(\d[\d.]*)-source\.tar\.bz2

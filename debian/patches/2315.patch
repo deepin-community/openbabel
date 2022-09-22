@@ -1,0 +1,235 @@
+From 7ec18edca2d749d29642261b5ad8578091f6e392 Mon Sep 17 00:00:00 2001
+From: Pino Toscano <toscano.pino@tiscali.it>
+Date: Sun, 3 Jan 2021 00:58:55 +0100
+Subject: [PATCH 1/4] cmake: use CMakePackageConfigHelpers for config files
+
+Make use of the CMakePackageConfigHelpers (available already in cmake
+3.1) to generate the OpenBabel3ConfigVersion.cmake file completely,
+and get rid of the local version.
+
+Mostly important, use CMakePackageConfigHelpers also for generating
+the bulk of OpenBabel3Config.cmake: the standard boilerplate from cmake
+is inserted, and that takes care of properly locating all the various
+paths from the installation directories.
+
+Fixes #2264.
+---
+ CMakeLists.txt                   | 39 ++++++++++++--------------------
+ OpenBabel3Config.cmake.in        | 14 +++---------
+ OpenBabel3ConfigVersion.cmake.in | 12 ----------
+ 3 files changed, 17 insertions(+), 48 deletions(-)
+ delete mode 100644 OpenBabel3ConfigVersion.cmake.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8393715c1..fcd3aedc0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -741,37 +741,26 @@ option(MINIMAL_BUILD "Disable full build" OFF)
+ # Create the Config and ConfigVersion files in the build directory, useful to
+ # build against an uninstalled OpenBabel build. Simply set OpenBabel3_DIR to
+ # point at the build directory and call find_package(OpenBabel3)
+-set(OpenBabel3_INCLUDE_DIRS
+-  "${openbabel_SOURCE_DIR}/include"
+-  "${openbabel_BINARY_DIR}/include")
+-configure_file("${openbabel_SOURCE_DIR}/OpenBabel3Config.cmake.in"
+-  "${openbabel_BINARY_DIR}/OpenBabel3Config.cmake" @ONLY)
+-configure_file("${openbabel_SOURCE_DIR}/OpenBabel3ConfigVersion.cmake.in"
+-  "${openbabel_BINARY_DIR}/OpenBabel3ConfigVersion.cmake" @ONLY)
+-
+-# Now to configure the installed config file.
++include(CMakePackageConfigHelpers)
+ set(OB_CONFIG_DIR "${LIB_INSTALL_DIR}/cmake/openbabel3")
+-set(OpenBabel3_INCLUDE_DIRS "\${OpenBabel3_INSTALL_PREFIX}/${OB_INCLUDE_DIRS}")
++set(OpenBabel3_INCLUDE_DIRS "${OB_INCLUDE_DIRS}")
+ set(OpenBabel3_LIBRARIES "$<TARGET_FILE:openbabel>")
+-
+-set(OB_EXPORTS_FILE
+-  "\${OpenBabel3_INSTALL_PREFIX}/${OB_CONFIG_DIR}/OpenBabel3_EXPORTS.cmake")
+-set(REL_REF)
+-if(NOT WIN32)
+-  set(REL_REF "/../../..")
+-endif()
+-configure_file("${openbabel_SOURCE_DIR}/OpenBabel3Config.cmake.in"
+-  "${openbabel_BINARY_DIR}/OpenBabel3ConfigInstall.cmake" @ONLY)
++set(OB_EXPORTS_FILE "OpenBabel3_EXPORTS.cmake")
++write_basic_package_version_file("${openbabel_BINARY_DIR}/OpenBabel3ConfigVersion.cmake"
++  VERSION ${BABEL_VERSION}
++  COMPATIBILITY AnyNewerVersion)
++configure_package_config_file("${openbabel_SOURCE_DIR}/OpenBabel3Config.cmake.in"
++  "${openbabel_BINARY_DIR}/OpenBabel3Config.cmake"
++  INSTALL_DESTINATION "${OB_CONFIG_DIR}"
++  PATH_VARS OpenBabel3_INCLUDE_DIRS)
+ 
+ install(EXPORT openbabel-targets
+   DESTINATION "${OB_CONFIG_DIR}"
+-  FILE OpenBabel3_EXPORTS.cmake
++  FILE "${OB_EXPORTS_FILE}"
+   COMPONENT Development)
+-install(FILES "${openbabel_BINARY_DIR}/OpenBabel3ConfigInstall.cmake"
+-  DESTINATION ${OB_CONFIG_DIR}
+-  COMPONENT Development
+-  RENAME OpenBabel3Config.cmake)
+-install(FILES "${openbabel_BINARY_DIR}/OpenBabel3ConfigVersion.cmake"
++install(FILES
++  "${openbabel_BINARY_DIR}/OpenBabel3Config.cmake"
++  "${openbabel_BINARY_DIR}/OpenBabel3ConfigVersion.cmake"
+   DESTINATION ${OB_CONFIG_DIR}
+   COMPONENT Development)
+ 
+diff --git a/OpenBabel3Config.cmake.in b/OpenBabel3Config.cmake.in
+index 830587a29..dbf96243a 100644
+--- a/OpenBabel3Config.cmake.in
++++ b/OpenBabel3Config.cmake.in
+@@ -1,16 +1,8 @@
+-# The OpenBabel3 config file. To get the targets include the exports file.
+-get_filename_component(OpenBabel3_INSTALL_PREFIX "${OpenBabel3_DIR}@REL_REF@"
+-  ABSOLUTE)
++@PACKAGE_INIT@
+ 
+-set(OpenBabel3_VERSION_MAJOR   "@BABEL_MAJ_VER@")
+-set(OpenBabel3_VERSION_MINOR   "@BABEL_MIN_VER@")
+-set(OpenBabel3_VERSION_PATCH   "@BABEL_PATCH_VER@")
+-set(OpenBabel3_VERSION         "@BABEL_VERSION@")
+-
+-set(OpenBabel3_INCLUDE_DIRS "@OpenBabel3_INCLUDE_DIRS@")
++set(OpenBabel3_INCLUDE_DIRS "@PACKAGE_OpenBabel3_INCLUDE_DIRS@")
+ set(OpenBabel3_LIBRARIES "@OpenBabel3_LIBRARIES@")
+-set(OpenBabel3_EXPORTS_FILE "@OB_EXPORTS_FILE@")
+ set(OpenBabel3_ENABLE_VERSIONED_FORMATS "@ENABLE_VERSIONED_FORMATS@")
+ 
+ # Include the exports file to import the exported OpenBabel targets
+-include("${OpenBabel3_EXPORTS_FILE}")
++include("${CMAKE_CURRENT_LIST_DIR}/@OB_EXPORTS_FILE@")
+diff --git a/OpenBabel3ConfigVersion.cmake.in b/OpenBabel3ConfigVersion.cmake.in
+deleted file mode 100644
+index f1f29b211..000000000
+--- a/OpenBabel3ConfigVersion.cmake.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-# OpenBabel3 CMake version file - http://www.openbabel.org/
+-
+-set(PACKAGE_VERSION @BABEL_MAJ_VER@.@BABEL_MIN_VER@.@BABEL_PATCH_VER@)
+-
+-if("${PACKAGE_VERSION}" VERSION_LESS "${PACKAGE_FIND_VERSION}")
+-  set(PACKAGE_VERSION_COMPATIBLE FALSE)
+-else("${PACKAGE_VERSION}" VERSION_LESS "${PACKAGE_FIND_VERSION}")
+-  set(PACKAGE_VERSION_COMPATIBLE TRUE)
+-  if("${PACKAGE_FIND_VERSION}" STREQUAL "${PACKAGE_VERSION}")
+-    set(PACKAGE_VERSION_EXACT TRUE)
+-  endif("${PACKAGE_FIND_VERSION}" STREQUAL "${PACKAGE_VERSION}")
+-endif("${PACKAGE_VERSION}" VERSION_LESS "${PACKAGE_FIND_VERSION}")
+
+From b4566b859d3e77d05f60a96c4047523f83b1584a Mon Sep 17 00:00:00 2001
+From: Pino Toscano <toscano.pino@tiscali.it>
+Date: Sun, 3 Jan 2021 01:08:36 +0100
+Subject: [PATCH 2/4] cmake: consider the openbabel dependencies as private
+
+Mark all the library dependencies of the openbabel library as private:
+this way, they will not be considered public interface, and thus neither
+used when linking to the openbabel library within openbabel itself, nor
+exposed in the cmake config file with the openbabel targets.
+
+Fixes #2305.
+---
+ src/CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index f505d6383..a80247e6d 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -249,7 +249,7 @@ add_library(openbabel ${BUILD_TYPE}
+   ${openbabel_library_srcs}
+   )
+ 
+-target_link_libraries(openbabel ${libs})
++target_link_libraries(openbabel PRIVATE ${libs})
+ if(Boost_FOUND)
+     include_directories(${Boost_INCLUDE_DIRS})
+ endif()
+@@ -257,7 +257,7 @@ endif()
+ if(BUILD_SHARED OR BUILD_MIXED)
+     set(THREADS_PREFER_PTHREAD_FLAG ON)
+     find_package(Threads REQUIRED)
+-    target_link_libraries(openbabel Threads::Threads)
++    target_link_libraries(openbabel PRIVATE Threads::Threads)
+ endif()
+ 
+ set_target_properties(openbabel PROPERTIES
+
+From 01b472dba12175cfaca5d4fe34f012ba27967f89 Mon Sep 17 00:00:00 2001
+From: Pino Toscano <toscano.pino@tiscali.it>
+Date: Sun, 3 Jan 2021 01:11:02 +0100
+Subject: [PATCH 3/4] cmake: set public include dirs for openbabel library
+
+Set the include directories as public include interfaces of the
+openbabel library: this way they will be written in the cmake config
+file with the openbabel targets, and thus used when using the
+"openbabel" imported library.
+---
+ src/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index a80247e6d..2a80d330d 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -280,6 +280,7 @@ install(TARGETS openbabel
+   RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+   LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
++  INCLUDES DESTINATION "${OB_INCLUDE_DIRS}"
+ )
+ 
+ if(BUILD_SHARED)
+
+From 96b7a33b58e5496b6570aab5172cd6cb6ade7d15 Mon Sep 17 00:00:00 2001
+From: Pino Toscano <toscano.pino@tiscali.it>
+Date: Sun, 3 Jan 2021 01:12:50 +0100
+Subject: [PATCH 4/4] cmake: use imported openbabel library
+
+Switch the OpenBabel3_INCLUDE_DIRS & OpenBabel3_LIBRARIES variables
+of the cmake config file to use the imported "openbabel" library:
+using that library alone is enough to get the include directories and
+the right library path; e.g.:
+
+  target_link_library(mytarget openbabel)
+---
+ CMakeLists.txt            | 5 ++---
+ OpenBabel3Config.cmake.in | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fcd3aedc0..7751b1c1c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -744,15 +744,14 @@ option(MINIMAL_BUILD "Disable full build" OFF)
+ include(CMakePackageConfigHelpers)
+ set(OB_CONFIG_DIR "${LIB_INSTALL_DIR}/cmake/openbabel3")
+ set(OpenBabel3_INCLUDE_DIRS "${OB_INCLUDE_DIRS}")
+-set(OpenBabel3_LIBRARIES "$<TARGET_FILE:openbabel>")
++set(OpenBabel3_LIBRARIES "openbabel")
+ set(OB_EXPORTS_FILE "OpenBabel3_EXPORTS.cmake")
+ write_basic_package_version_file("${openbabel_BINARY_DIR}/OpenBabel3ConfigVersion.cmake"
+   VERSION ${BABEL_VERSION}
+   COMPATIBILITY AnyNewerVersion)
+ configure_package_config_file("${openbabel_SOURCE_DIR}/OpenBabel3Config.cmake.in"
+   "${openbabel_BINARY_DIR}/OpenBabel3Config.cmake"
+-  INSTALL_DESTINATION "${OB_CONFIG_DIR}"
+-  PATH_VARS OpenBabel3_INCLUDE_DIRS)
++  INSTALL_DESTINATION "${OB_CONFIG_DIR}")
+ 
+ install(EXPORT openbabel-targets
+   DESTINATION "${OB_CONFIG_DIR}"
+diff --git a/OpenBabel3Config.cmake.in b/OpenBabel3Config.cmake.in
+index dbf96243a..444669b7d 100644
+--- a/OpenBabel3Config.cmake.in
++++ b/OpenBabel3Config.cmake.in
+@@ -1,6 +1,6 @@
+ @PACKAGE_INIT@
+ 
+-set(OpenBabel3_INCLUDE_DIRS "@PACKAGE_OpenBabel3_INCLUDE_DIRS@")
++set(OpenBabel3_INCLUDE_DIRS "")
+ set(OpenBabel3_LIBRARIES "@OpenBabel3_LIBRARIES@")
+ set(OpenBabel3_ENABLE_VERSIONED_FORMATS "@ENABLE_VERSIONED_FORMATS@")
+ 

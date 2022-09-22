@@ -1,0 +1,10 @@
+#!/bin/bash
+
+test "$(dpkg --print-architecture)" = arm64 && exit 77
+
+sed -i 's/"\.\."/"\/usr"/' test/testbabel.py
+
+for TEST in test/test*.py
+do
+    python3 ${TEST}
+done

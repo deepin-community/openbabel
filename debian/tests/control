@@ -1,0 +1,7 @@
+Tests: python3
+Depends:
+ @,
+Restrictions:
+ allow-stderr,
+ rw-build-tree,
+ skippable,

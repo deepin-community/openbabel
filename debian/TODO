@@ -1,0 +1,8 @@
+TODO for openbabel
+------------------
+
+  + package openbabel binding of perl, ruby, java
+    package libopenbabel-perl and libopenbabel-ruby
+  
+  + package the wx-gui of openbabel
+

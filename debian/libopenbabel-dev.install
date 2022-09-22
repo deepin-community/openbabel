@@ -1,0 +1,4 @@
+usr/include/openbabel*
+usr/lib/*/cmake/openbabel*
+usr/lib/*/libopenbabel*so
+usr/lib/*/pkgconfig/openbabel*
