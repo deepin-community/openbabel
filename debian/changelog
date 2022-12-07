@@ -1,3 +1,9 @@
+openbabel (3.1.1+dfsg-6.1-deepin1) unstalbe; urgency=medium
+
+  * add missing lib ctime
+
+ -- root <root@f34afac46ce7>  Wed, 07 Dec 2022 07:32:43 +0000
+
 openbabel (3.1.1+dfsg-6) unstable; urgency=medium
 
   * Fixing the version number via a patch.
