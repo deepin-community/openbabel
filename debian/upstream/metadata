@@ -1,6 +1,5 @@
 Bug-Database: https://github.com/openbabel/openbabel/issues
 Bug-Submit: https://github.com/openbabel/openbabel/issues/new
-Homepage: http://openbabel.org
 FAQ: http://openbabel.org/wiki/FAQ
 Reference:
  - Debian-Package: openbabel
@@ -23,3 +22,4 @@ Reference:
    URL: http://journal.chemistrycentral.com/content/2/1/5
    eprint: http://journal.chemistrycentral.com/content/pdf/1752-153X-2-5.pdf
    DOI: 10.1186/1752-153X-2-5
+Repository-Browse: https://github.com/openbabel/openbabel

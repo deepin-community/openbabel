@@ -1,0 +1,28 @@
+From 3601e081f9ff8ae670d50ed47294a0c4f4760321 Mon Sep 17 00:00:00 2001
+From: Andrius Merkys <andrius.merkys@gmail.com>
+Date: Fri, 21 Jun 2024 14:23:31 +0300
+Subject: [PATCH] Restore compatibility with libxml2 2.12.7.
+
+---
+ src/formats/xml/xml.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/formats/xml/xml.cpp b/src/formats/xml/xml.cpp
+index 2042b0c298..6b4eb614c0 100644
+--- a/src/formats/xml/xml.cpp
++++ b/src/formats/xml/xml.cpp
+@@ -242,13 +242,12 @@ namespace OpenBabel
+ 
+     if(result==-1)
+     {
+-      xmlError* perr = xmlGetLastError();
++      const xmlError* perr = xmlGetLastError();
+       if(perr && perr->level!=XML_ERR_NONE)
+         {
+           obErrorLog.ThrowError("XML Parser " + GetInFilename(),
+                                 perr->message, obError);
+         }
+-      xmlResetError(perr);
+       GetInStream()->setstate(ios::eofbit);
+       return false;
+     }

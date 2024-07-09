@@ -1,0 +1,12 @@
+Description: Add '#include <ctime>' as 'clock' is defined there (#1016227).
+Author: Andrius Merkys <merkys@debian.org>
+--- a/include/openbabel/obutil.h
++++ b/include/openbabel/obutil.h
+@@ -37,6 +37,7 @@
+ #endif
+ 
+ #include <math.h>
++#include <ctime>
+ 
+ #ifndef M_PI
+ #define M_PI 3.14159265358979323846
