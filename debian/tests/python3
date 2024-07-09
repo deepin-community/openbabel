@@ -1,10 +1,58 @@
 #!/bin/bash
 
-test "$(dpkg --print-architecture)" = arm64 && exit 77
+set -e
 
 sed -i 's/"\.\."/"\/usr"/' test/testbabel.py
 
+arch=$(dpkg --print-architecture)
+fails=
 for TEST in test/test*.py
 do
-    python3 ${TEST}
+    fail_on_failure=true
+    case $TEST in
+      test/testroundtrip.py)
+        # timesout?
+        echo "Skipping ${TEST} ..."
+        continue;;
+      test/testdistgeom.py)
+        case "$arch" in amd64|armel)
+          # timesout on ci.d.n worker13
+          # takes very long on armel
+	  echo "Skipping ${TEST} ..."
+	  continue;;
+	esac;;		      
+      test/testbindings.py)
+        case "$arch" in
+          amd64)
+            true;;
+          *)
+            fail_on_failure=false;;
+        esac;;
+      test/testsym.py)
+          # on most/all non-amd64 architecture it fails
+          # if it finishes at all, it takes a very long time
+          # on worker13, the test takes 1000 times longer than on other amd64 hosts
+          echo "Skipping ${TEST} ..."
+          continue;;
+      test/testobconv_writers.py)
+        case "$arch" in arm64|i386|ppc64el|s390x)
+          fail_on_failure=false;;
+        esac;;
+    esac
+    echo "Running ${TEST} ..."
+    if python3 ${TEST}; then
+	:
+    else
+       if [ $fail_on_failure = "false" ] ; then
+         echo "Ignoring ${TEST} on $arch ..."
+       else
+         fails="$fails $TEST"
+       fi
+    fi
 done
+
+if [ -n "$fails" ]; then
+    echo "Failing tests: $fails"
+    exit 1
+fi
+exit 0

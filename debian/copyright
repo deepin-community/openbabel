@@ -180,7 +180,7 @@ Copyright: 2001-2008, Greg Landrum and Rational Discovery LLC
 License: BSD-3-Clause
 
 
-Files: ./data/SMARTS_InteLigand.txt
+Files: data/SMARTS_InteLigand.txt
 Copyright: 2005, Inte:Ligand Software-Entwicklungs und Consulting GmbH
 License: LGPL-3
 

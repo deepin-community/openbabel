@@ -1,14 +1,61 @@
-openbabel (3.1.1.1-deepin1) unstable; urgency=medium
+openbabel (3.1.1+dfsg-10) unstable; urgency=medium
 
-  * add missing lib ctime 
+  [ Drew Parsons ]
+  * update Homepage to https://openbabel.org
 
- -- ZhengJie-Niu <niuzj0@gmail.com>  Wed, 07 Dec 2022 07:36:26 +0000
+  [ Andrius Merkys ]
+  * Restore compatibility with libxml (Closes: #1073327)
 
-openbabel (3.1.1+dfsg-6.1-deepin1) unstalbe; urgency=medium
+ -- Andrius Merkys <merkys@debian.org>  Mon, 01 Jul 2024 02:14:46 -0400
 
-  * add missing lib ctime
+openbabel (3.1.1+dfsg-9) unstable; urgency=medium
 
- -- root <root@f34afac46ce7>  Wed, 07 Dec 2022 07:32:43 +0000
+  * Remove dh_missing call from override_dh_install to fix arch:all build.
+
+ -- Andrius Merkys <merkys@debian.org>  Thu, 01 Dec 2022 02:47:57 -0500
+
+openbabel (3.1.1+dfsg-8) unstable; urgency=medium
+
+  * Acknowledge NMUs.
+  * Fix debian/watch to watch GitHub tags.
+  * Transition to wxwidgets3.2 (Closes: #1019808)
+  * Simplify a path in debian/copyright.
+  * Bump debhelper from old 12 to 13.
+  * Set upstream metadata fields: Repository-Browse.
+  * Update standards version to 4.6.1, no changes needed.
+  * Remove Homepage from debian/upstream/metadata.
+
+ -- Andrius Merkys <merkys@debian.org>  Mon, 28 Nov 2022 10:26:44 -0500
+
+openbabel (3.1.1+dfsg-7.2) unstable; urgency=medium
+
+  * Non-maintainer upload
+  * tests: further tune which tests to run with latest results from ci.d.n
+
+ -- Paul Gevers <elbrus@debian.org>  Thu, 24 Nov 2022 13:15:37 +0100
+
+openbabel (3.1.1+dfsg-7.1) unstable; urgency=medium
+
+  * Non-maintainer upload
+
+  [ Matthias Klose ]
+  * Make the autopkg tests more verbose, don't fail on the first failing test.
+  * Re-enable the tests on arm64.
+  * Skip the test/testroundtrip.py test on all architectures, times out
+    (Closes: #953630)
+  * Skip the testbindings.py and testsym.py tests on non amd64 architectures.
+
+  [ Paul Gevers ]
+  * Run all tests that don't timeout, but ignore specific failures on
+    specific architectures
+
+ -- Paul Gevers <elbrus@debian.org>  Sun, 20 Nov 2022 10:24:49 +0100
+
+openbabel (3.1.1+dfsg-7) unstable; urgency=medium
+
+  * Include <ctime> in obutil.h (Closes: #1016227)
+
+ -- Andrius Merkys <merkys@debian.org>  Thu, 08 Sep 2022 08:29:09 -0400
 
 openbabel (3.1.1+dfsg-6) unstable; urgency=medium
 

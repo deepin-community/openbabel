@@ -34,14 +34,11 @@ override_dh_auto_build:
 	dh_auto_build
 	make -C $(CURDIR)/builddir docs
 
-override_dh_install:
-	dh_install -Nlibchemistry-openbabel-perl
-	dh_missing --list-missing -Nlibchemistry-openbabel-perl
-	mkdir -p $(CURDIR)/debian/tmp/$(PERL_ARCHLIB)
+override_dh_auto_install:
+	dh_auto_install
+	mkdir --parents $(CURDIR)/debian/tmp/$(PERL_ARCHLIB)
 	mv debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/auto debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/Chemistry \
-	  $(CURDIR)/debian/tmp/$(PERL_ARCHLIB)
-	dh_install -plibchemistry-openbabel-perl -Xperllocal.pod --autodest $(PERL_ARCHLIB)
-	dh_missing --list-missing -plibchemistry-openbabel-perl -Xperllocal.pod
+		$(CURDIR)/debian/tmp/$(PERL_ARCHLIB)
 
 override_dh_installexamples:
 	dh_installexamples -X.pyc
@@ -50,7 +47,7 @@ override_dh_installdocs:
 	dh_installdocs -X.js
 
 override_dh_compress:
-	dh_compress -Xusr/share/doc/libopenbabel-dev/html/ \
+	dh_compress -Xusr/share/doc/libopenbabel-dev/html \
 	            -Xusr/share/doc/python3-openbabel/examples
 
 override_dh_auto_test:
