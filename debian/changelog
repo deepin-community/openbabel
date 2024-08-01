@@ -1,3 +1,9 @@
+openbabel (3.1.1.1+dfsg-10deepin1) unstable; urgency=medium
+
+  * fix changelog.
+
+ -- LiChengGang <lichenggang@uniontech.com>  Thu, 01 Aug 2024 16:57:34 +0800
+
 openbabel (3.1.1+dfsg-10) unstable; urgency=medium
 
   [ Drew Parsons ]
