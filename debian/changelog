@@ -1,5 +1,11 @@
 openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
 
+  * Fix CVE-2026-2704: heap-buffer-overflow in transform3d.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:37 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
   * Fix CVE-2025-11000: out-of-bounds read in PQS format.
 
  -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:33 +0800
