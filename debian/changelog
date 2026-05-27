@@ -1,5 +1,11 @@
 openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
 
+  * Fix CVE-2025-10998: NULL dereference in ChemKin format.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:24 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
   * Fix CVE-2025-10997: heap-buffer-overflow in ChemKin format.
 
  -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:19 +0800
