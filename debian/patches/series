@@ -4,3 +4,4 @@ remove_link_top.diff
 650b1f829ac47cc84877a330366ec9485da3ec99.patch
 add-ctime.patch
 7acf50c9d73f8016e15eb2a45ce74c8909152883.patch
+CVE-2025-10994.patch
