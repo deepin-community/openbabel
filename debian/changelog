@@ -1,3 +1,57 @@
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
+  * Fix CVE-2026-2705: NULL dereference in MOL2 format.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:41 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
+  * Fix CVE-2026-2704: heap-buffer-overflow in transform3d.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:37 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
+  * Fix CVE-2025-11000: out-of-bounds read in PQS format.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:33 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
+  * Fix CVE-2025-10999: NULL dereference in CACAO format.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:28 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
+  * Fix CVE-2025-10998: NULL dereference in ChemKin format.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:24 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
+  * Fix CVE-2025-10997: heap-buffer-overflow in ChemKin format.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:19 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
+  * Fix CVE-2025-10996: heap-buffer-overflow in SMILES parser.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:15 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
+  * Fix CVE-2025-10995: overlapping memcpy in zip uncompression.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:10 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
+  * Fix CVE-2025-10994: use-after-free in GAMESS format parser.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:05 +0800
+
 openbabel (3.1.1.1+dfsg-10deepin1) unstable; urgency=medium
 
   * fix changelog.
