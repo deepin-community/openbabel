@@ -1,5 +1,11 @@
 openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
 
+  * Fix CVE-2025-10995: overlapping memcpy in zip uncompression.
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:10 +0800
+
+openbabel (3.1.1.1+dfsg-10deepin10) unstable; urgency=medium
+
   * Fix CVE-2025-10994: use-after-free in GAMESS format parser.
 
  -- deepin-ci-robot <packages@deepin.org>  Thu, 28 May 2026 02:45:05 +0800
